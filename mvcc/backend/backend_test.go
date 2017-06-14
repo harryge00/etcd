@@ -63,17 +63,18 @@ func TestBackendSnapshot(t *testing.T) {
 	}
 	snap := b.Snapshot()
 	defer snap.Close()
+	// HOW? Why not restore from snapshot?
 	if _, err := snap.WriteTo(f); err != nil {
 		t.Fatal(err)
 	}
 	f.Close()
-
+	fmt.Println(f.Name(), tmpPath)
 	// bootstrap new backend from the snapshot
 	bcfg := DefaultBackendConfig()
 	bcfg.Path, bcfg.BatchInterval, bcfg.BatchLimit = f.Name(), time.Hour, 10000
 	nb := New(bcfg)
 	defer cleanup(nb, f.Name())
-
+	nb.
 	newTx := b.BatchTx()
 	newTx.Lock()
 	ks, _ := newTx.UnsafeRange([]byte("test"), []byte("foo"), []byte("goo"), 0)
@@ -252,5 +253,5 @@ func TestBackendWriteback(t *testing.T) {
 
 func cleanup(b Backend, path string) {
 	b.Close()
-	os.Remove(path)
+	// os.Remove(path)
 }

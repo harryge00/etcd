@@ -120,6 +120,7 @@ func NewDefaultBackend(path string) Backend {
 }
 
 func newBackend(bcfg BackendConfig) *backend {
+	// Create a new bolt
 	bopts := &bolt.Options{}
 	if boltOpenOptions != nil {
 		*bopts = *boltOpenOptions
@@ -417,6 +418,7 @@ func (b *backend) unsafeBegin(write bool) *bolt.Tx {
 // NewTmpBackend creates a backend implementation for testing.
 func NewTmpBackend(batchInterval time.Duration, batchLimit int) (*backend, string) {
 	dir, err := ioutil.TempDir(os.TempDir(), "etcd_backend_test")
+	fmt.Println(dir)
 	if err != nil {
 		plog.Fatal(err)
 	}
